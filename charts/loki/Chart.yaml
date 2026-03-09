@@ -1,0 +1,9 @@
+# 공식 최신 로키 차트(grafana/loki) 사용 / (추가)26-03-16 커뮤니티 주도 업데이트 예정으로 version 고정
+apiVersion: v2
+name: loki-wrapper
+version: 1.0.0
+description: A wrapper chart for loki
+dependencies:
+  - name: loki
+    version: 6.53.0
+    repository: https://grafana.github.io/helm-charts

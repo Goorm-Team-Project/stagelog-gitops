@@ -15,6 +15,16 @@ kube-prometheus-stack:
       enabled: true
       storageClassName: "gp3" # EKS 동적 프로비저닝 (EBS)
       size: 5Gi
+    additionalDataSources: # Loki 데이터 소스 추가
+      - name: Loki
+        uid: loki
+        type: loki
+        access: proxy
+        isDefault: true
+        editable: false
+        url: http://loki-gateway.monitoring.svc.cluster.local # Loki 데이터 소스 URL (gateway/direct service 이름)
+        jsonData:
+          maxLines: 1000
 
   prometheus:
     prometheusSpec:
