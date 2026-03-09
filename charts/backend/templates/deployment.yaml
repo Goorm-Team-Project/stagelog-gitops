@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: {{- define "backend.fullname" -}}
+  name: {{  include "backend.fullname" . }}
   labels:
     app: {{ .Values.name }}
 
