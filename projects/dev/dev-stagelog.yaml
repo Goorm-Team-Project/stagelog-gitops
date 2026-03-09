@@ -9,7 +9,7 @@ spec:
   description: Dev environment project
 
   sourceRepos:
-    - https://github.com/org/stagelog-gitops
+    - https://github.com/Goorm-Team-Project/stagelog-gitops.git
 
   destinations:
     - namespace: dev-*
