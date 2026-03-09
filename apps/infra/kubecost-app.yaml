@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubecost
+  namespace: argocd
+spec:
+  project: dev-stagelog
+  source:
+    repoURL: 'https://github.com/Goorm-Team-Project/stagelog-gitops.git'
+    targetRevision: main
+    path: charts/kubecost
+    helm:
+      valueFiles:
+        - values/dev/kubecost.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kubecost
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

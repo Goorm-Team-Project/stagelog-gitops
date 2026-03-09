@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/Goorm-Team-Project/stagelog-gitops.git' # 실제 Git 레포 주소로 변경
+    targetRevision: main
+    path: apps # apps 폴더 전체를 바라보게 설정
+    directory:
+      recurse: true # 하위 폴더(dev, infra)의 모든 yaml을 읽어들임
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

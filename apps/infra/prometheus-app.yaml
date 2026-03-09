@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-stack
+  namespace: argocd
+spec:
+  project: dev-stagelog
+  source:
+    repoURL: 'https://github.com/Goorm-Team-Project/stagelog-gitops.git'
+    targetRevision: main
+    path: charts/prometheus
+    helm:
+      valueFiles:
+        - values/dev/prometheus.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

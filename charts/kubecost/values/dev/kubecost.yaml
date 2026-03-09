@@ -1,0 +1,21 @@
+cost-analyzer:
+  kubecostModel:
+    persistence:
+      enabled: true
+      storageClassName: "gp3"
+      size: 32Gi
+
+  prometheus:
+    server:
+      persistentVolume:
+        enabled: true
+        storageClass: "gp3"
+        size: 32Gi
+
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "800m"
+      memory: "1Gi"
