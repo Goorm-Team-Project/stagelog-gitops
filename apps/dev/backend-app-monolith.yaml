@@ -1,20 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
+
 metadata:
-  name: root-app
+  name: backend-monolith
   namespace: argocd
 
 spec:
-  project: default
+  project: dev-stagelog
 
   source:
     repoURL: https://github.com/Goorm-Team-Project/stagelog-gitops.git
     targetRevision: develop
-    path: argocd
+    path: charts/backend
+
+    helm:
+      valueFiles:
+        - values/dev/monolith.yaml
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: dev-monolith
 
   syncPolicy:
     automated:

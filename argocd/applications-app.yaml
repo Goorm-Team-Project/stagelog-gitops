@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-app
+  name: applications-app
   namespace: argocd
 
 spec:
@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/Goorm-Team-Project/stagelog-gitops.git
     targetRevision: develop
-    path: argocd
+    path: apps/dev
 
   destination:
     server: https://kubernetes.default.svc
@@ -20,6 +20,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-
-    syncOptions:
-      - CreateNamespace=true
