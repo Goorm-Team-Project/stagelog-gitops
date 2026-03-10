@@ -11,4 +11,16 @@ service:
   type: ClusterIP
   port: 80
 
+ingress:
+  enabled: true
+  className: nginx
+
+  host: api.local
+  path: /
+
+  annotations: {}
+
+  tls: false
+  tlsSecret: ""
+
 resources: {}
