@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: {{ include "backend.fullname" . }}
   labels:
-    app: {{ .Values.name }}
+    app.kubernetes.io/instance: {{ .Values.name }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

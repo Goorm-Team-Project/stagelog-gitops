@@ -4,19 +4,19 @@ kind: Deployment
 metadata:
   name: {{  include "backend.fullname" . }}
   labels:
-    app: {{ .Values.name }}
+    app.kubernetes.io/instance: {{ .Values.name }}
 
 spec:
   replicas: {{ .Values.replicaCount }}
 
   selector:
     matchLabels:
-      app: {{ .Values.name }}
+      app.kubernetes.io/instance: {{ .Values.name }}
 
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}
+        app.kubernetes.io/instance: {{ .Values.name }}
 
     spec:
       containers:

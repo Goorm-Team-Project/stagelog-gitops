@@ -4,13 +4,13 @@ kind: Service
 metadata:
   name: {{  include "backend.fullname" . }}
   labels:
-    app: {{ .Values.name }}
+    app.kubernetes.io/instance: {{ .Values.name }}
 
 spec:
   type: {{ .Values.service.type }}
 
   selector:
-    app: {{ .Values.name }}
+    app.kubernetes.io/instance: {{ .Values.name }}
 
   ports:
     - port: {{ .Values.service.port }}
