@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+name: argocd-cm
+namespace: argocd
+data:
+
+# ArgoCD UI 접속 주소
+url: http://localhost:8080
+
+# ArgoCD가 리소스를 추적하는 방식
+# annotation | label | annotation+label
+application.resourceTrackingMethod: annotation+label
+
+# 리소스 비교 시 status 필드 무시
+resource.compareoptions: |
+ignoreResourceStatusField: all
+
+# Helm 설정
+helm.enableOCI: "true"
+
+# Kustomize 버전
+kustomize.buildOptions: "--load-restrictor LoadRestrictionsNone"
+
+# Admin 계정 활성화 여부
+admin.enabled: "true"
+
+# Application 상태 refresh 주기
+timeout.reconciliation: 180s
+
+# ArgoCD UI에서 상태 badge 표시
+statusbadge.enabled: "true"
+
+# Git repository credential template 예시
+# repository.credentials: |
+# - url: https://github.com
+# usernameSecret:
+# name: repo-secret
+# key: username
+# passwordSecret:
+# name: repo-secret
+# key: password
