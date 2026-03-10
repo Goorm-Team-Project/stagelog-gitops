@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: monolith-test1
+  name: monolith-test2
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
