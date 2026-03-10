@@ -1,0 +1,17 @@
+kube-prometheus-stack:
+  grafana:
+    persistence:
+      enabled: false
+
+  prometheus:
+    prometheusSpec:
+      retention: "2d"
+      storageSpec: null
+
+  alertmanager:
+    enabled: false
+
+  prometheus-node-exporter:
+    prometheus:
+      monitor:
+        enabled: false

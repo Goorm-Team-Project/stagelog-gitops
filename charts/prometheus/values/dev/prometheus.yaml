@@ -20,7 +20,7 @@ kube-prometheus-stack:
         uid: loki
         type: loki
         access: proxy
-        isDefault: true
+        isDefault: false
         editable: false
         url: http://loki-gateway.monitoring.svc.cluster.local # Loki 데이터 소스 URL (gateway/direct service 이름)
         jsonData:
