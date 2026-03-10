@@ -4,6 +4,8 @@ kind: Application
 metadata:
   name: monolith
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 
 spec:
   project: dev-stagelog
