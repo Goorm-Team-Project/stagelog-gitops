@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: backend-monolith
+  name: backend-app-monolith
   namespace: argocd
 
 spec:
