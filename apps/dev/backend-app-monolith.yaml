@@ -6,7 +6,7 @@ metadata:
   namespace: argocd
 
 spec:
-  project: dev-appProject-stagelog
+  project: dev-stagelog
 
   source:
     repoURL: https://github.com/Goorm-Team-Project/stagelog-gitops.git
