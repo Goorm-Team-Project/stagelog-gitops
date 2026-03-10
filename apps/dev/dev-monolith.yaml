@@ -2,12 +2,14 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: monolith-test
+  name: monolith-test1
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 
 spec:
   project: dev-stagelog
-
+  
   source:
     repoURL: https://github.com/Goorm-Team-Project/stagelog-gitops.git
     targetRevision: develop
