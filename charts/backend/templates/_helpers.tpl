@@ -1,3 +1,3 @@
 {{- define "backend.fullname" -}}
-{{ .Chart.Name }}-{{ .Release.Name }}
+{{ .Chart.Name }}-{{ .Value.Name }}
 {{- end }}
