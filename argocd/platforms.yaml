@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dev-applications
+  name: platforms
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "-2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 
@@ -14,7 +14,7 @@ spec:
   source:
     repoURL: https://github.com/Goorm-Team-Project/stagelog-gitops.git
     targetRevision: develop
-    path: apps/dev
+    path: apps/platforms
 
   destination:
     server: https://kubernetes.default.svc
