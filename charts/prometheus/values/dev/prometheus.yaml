@@ -12,23 +12,13 @@ kube-prometheus-stack:
           revision: 3
           datasource: "Prometheus"
     persistence:
-      enabled: true
-      storageClassName: "gp3" # EKS 동적 프로비저닝 (EBS)
-      size: 5Gi
+      enabled: false
 
   prometheus:
     prometheusSpec:
       scrapeInterval: "30s" # Grafana Timeout 충돌 해결을 위한 간격 상향
       scrapeTimeout: "10s"
       retention: "15d"
-      storageSpec:
-        volumeClaimTemplate:
-          spec:
-            storageClassName: "gp3"
-            accessModes: ["ReadWriteOnce"]
-            resources:
-              requests:
-                storage: 20Gi
       serviceMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelector:
         matchLabels:
@@ -48,14 +38,6 @@ kube-prometheus-stack:
         - webhook_url: 'https://discord.com/api/webhooks/1478914160292266166/RICxr28vSbD0NQ02dQIo8DJySAQRXQZd7XweBacdLwepsNz5D0nvE-WtG18tkmWe0Rex'
           send_resolved: true
     alertmanagerSpec:
-      storage:
-        volumeClaimTemplate:
-          spec:
-            storageClassName: "gp3"
-            accessModes: ["ReadWriteOnce"]
-            resources:
-              requests:
-                storage: 10Gi
 
   prometheus-node-exporter:
     prometheus:

@@ -1,16 +1,12 @@
 cost-analyzer:
   kubecostModel:
     persistence:
-      enabled: true
-      storageClassName: "gp3"
-      size: 32Gi
+      enabled: false
 
   prometheus:
     server:
       persistentVolume:
-        enabled: true
-        storageClass: "gp3"
-        size: 32Gi
+        enabled: false
 
   resources:
     requests:
