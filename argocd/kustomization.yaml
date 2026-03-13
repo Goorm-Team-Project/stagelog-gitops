@@ -8,6 +8,7 @@ resources:
 
 patches:
   - target:
+      version: v1
       kind: ConfigMap
       name: argocd-cm
       namespace: argocd
