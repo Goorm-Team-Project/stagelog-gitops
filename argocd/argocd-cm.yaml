@@ -5,11 +5,13 @@ metadata:
   namespace: argocd
 
 data:
+  application.instanceLabelKey: argocd.argoproj.io/instance # 기존키 가져오기
+  timeout.reconciliation: 180s
+  application.resourceTrackingMethod: annotation+label # ArgoCD가 리소스를 추적하는 방식
 # # ArgoCD UI 접속 주소
 #   #url: https://localhost:8080
 
-# ArgoCD가 리소스를 추적하는 방식
-# annotation | label | annotation+label
-  application.resourceTrackingMethod: annotation+label
+
+
 
 
