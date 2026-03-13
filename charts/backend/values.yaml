@@ -11,13 +11,19 @@ service:
 
 ingress:
   enabled: true
-  className: nginx
+  className: alb
 
   host: api.example.com
   path: /
 
   annotations: {}
+    
 
   tls: false
   tlsSecret: ""
 resources: {}
+
+configs:
+  cm:
+    # ArgoCD가 리소스를 추적하는 방식을 annotation과 label 모두 사용하도록 설정
+    application.resourceTrackingMethod: "annotation+label"
