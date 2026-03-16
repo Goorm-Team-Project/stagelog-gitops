@@ -7,6 +7,7 @@ ingress:
   enabled: false
 
 service:
+  enabled: true
   name: events-svc
   type: ClusterIP
   port: 8000
