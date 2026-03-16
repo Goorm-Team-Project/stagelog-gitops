@@ -2,8 +2,9 @@ name: dev-monolith
 
 deployment:
   enabled: false
-  
-replicaCount: 1
+
+ingress:
+  enabled: false
 
 service:
   name: auth-svc

@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-backend
-  tag: 3995568
+  tag: latest
   pullPolicy: IfNotPresent
       
 # service:
