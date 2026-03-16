@@ -2,13 +2,13 @@ name: dev-monolith
 
 deployment:
   enabled: true
-  
+
 replicaCount: 1
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-backend
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
       
 # service:
 #   type: ClusterIP
