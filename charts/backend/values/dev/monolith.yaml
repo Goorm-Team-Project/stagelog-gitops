@@ -3,26 +3,58 @@ name: dev-monolith
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: latest
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-backend
+  tag: 3995568
   pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 80
+      
+# service:
+#   type: ClusterIP
+#   port: 8000
 
 ingress:
   enabled: true
+  name: stagelog-public-api
   className: alb
 
-  host: 
-  path: /
-
-  annotations: 
+  annotations:
+    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:430118823715:certificate/5a984177-ce59-45c6-a959-b2ce8856e67f
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/group.name: stagelog-public-api
 
-  tls: false
-  tlsSecret: ""
+  rules:
+    - path: /api/users
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /api/users/
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /api/events
+      serviceName: events-svc
+      servicePort: 8000
+
+    - path: /api/events/
+      serviceName: events-svc
+      servicePort: 8000
+
+    - path: /api/bookmarks
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /api/bookmarks/
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /api/
+      serviceName: core-svc
+      servicePort: 8000
+
+
 
 resources: {}

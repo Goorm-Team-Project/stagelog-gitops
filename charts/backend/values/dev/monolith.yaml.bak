@@ -1,0 +1,38 @@
+name: dev-monolith
+
+replicaCount: 1
+
+image:
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog/backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+extraVolumeMounts:
+  - name: env-file
+    mountPath: /app/.env
+    subPath: .env
+
+extraVolumes:
+  - name: env-file
+    secret:
+      secretName: dev-secret
+      
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: alb
+
+  host: 
+  path: /
+
+  annotations: 
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+  tls: false
+  tlsSecret: ""
+
+resources: {}

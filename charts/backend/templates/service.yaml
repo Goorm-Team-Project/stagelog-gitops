@@ -1,8 +1,9 @@
+{{- if .Values.service.enabled }}
 apiVersion: v1
 kind: Service
 
 metadata:
-  name: {{  include "backend.fullname" . }}
+  name: {{ .Values.service.name }}
   labels:
     app: {{ .Values.name }}
 
@@ -16,3 +17,5 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
       protocol: TCP
+
+{{- end }}

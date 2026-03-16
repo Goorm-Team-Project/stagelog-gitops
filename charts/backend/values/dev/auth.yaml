@@ -1,0 +1,9 @@
+name: dev-monolith
+
+replicaCount: 1
+
+service:
+  name: auth-svc
+  type: ClusterIP
+  port: 8000
+
