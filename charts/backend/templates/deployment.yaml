@@ -1,4 +1,4 @@
-{{- if .Values.deployment.enabled }}
+{{- if (.Values.deployment.enabled | default false) }}
 apiVersion: apps/v1
 kind: Deployment
 
