@@ -1,5 +1,8 @@
 name: dev-monolith
 
+deployment:
+  enabled: false
+  
 replicaCount: 1
 
 service:
