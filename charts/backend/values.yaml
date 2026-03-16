@@ -13,7 +13,7 @@ ingress:
   enabled: true
   className: alb
 
-  host: api.example.com
+  host: 
   path: /
 
   annotations: {}
