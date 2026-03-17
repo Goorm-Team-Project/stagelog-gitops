@@ -40,34 +40,34 @@ ingress:
   
   host: api.pearlinvest.click 
   rules: 
-  - path: /api/users
-    pathType: Prefix
-    backend:
-      service:
-        name: auth-svc
-        port:
-          number: 80
-  - path: /api/events
-    pathType: Prefix
-    backend:
-      service:
-        name: events-svc
-        port:
-          number: 80
-  - path: /api/bookmarks
-    pathType: Prefix
-    backend:
-      service:
-        name: auth-svc
-        port:
-          number: 80
-  - path: /api/
-    pathType: Prefix
-    backend:
-      service:
-        name: core-svc
-        port:
-          number: 8000
+    - path: /api/users
+      pathType: Prefix
+      backend:
+        service:
+          name: auth-svc
+          port:
+            number: 80
+    - path: /api/events
+      pathType: Prefix
+      backend:
+        service:
+          name: events-svc
+          port:
+            number: 80
+    - path: /api/bookmarks
+      pathType: Prefix
+      backend:
+        service:
+          name: auth-svc
+          port:
+            number: 80
+    - path: /api/
+      pathType: Prefix
+      backend:
+        service:
+          name: core-svc
+          port:
+            number: 8000
 
 
 
