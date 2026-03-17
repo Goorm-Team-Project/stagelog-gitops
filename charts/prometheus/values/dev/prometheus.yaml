@@ -46,7 +46,7 @@ kube-prometheus-stack:
         discord_configs:
         - webhook_url: 'https://discord.com/api/webhooks/1478914160292266166/RICxr28vSbD0NQ02dQIo8DJySAQRXQZd7XweBacdLwepsNz5D0nvE-WtG18tkmWe0Rex'
           send_resolved: true
-    alertmanagerSpec:
+    alertmanagerSpec: {}
 
   prometheus-node-exporter:
     prometheus:

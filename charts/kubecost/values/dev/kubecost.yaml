@@ -1,4 +1,7 @@
 cost-analyzer:
+  persistentVolume:
+    enabled: false
+
   kubecostModel:
     persistence:
       enabled: false
