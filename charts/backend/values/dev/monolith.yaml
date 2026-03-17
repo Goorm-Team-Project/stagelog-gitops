@@ -34,7 +34,7 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:430118823715:certificate/5a984177-ce59-45c6-a959-b2ce8856e67f
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:430118823715:certificate/0939ee3c-791b-464a-9d1b-0fa8ab84678e
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/group.name: stagelog-public-api
 
