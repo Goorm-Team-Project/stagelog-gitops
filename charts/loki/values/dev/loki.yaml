@@ -35,10 +35,17 @@ loki:
       limits:
         cpu: 500m
         memory: 512Mi
+
     persistence:
-      enabled: true
-      size: 10Gi
-      storageClass: gp2
+      enabled: false
+
+    extraVolumes:
+      - name: loki-data
+        emptyDir: {}
+
+    extraVolumeMounts:
+      - name: loki-data
+        mountPath: /var/loki
 
   read:
     replicas: 0
