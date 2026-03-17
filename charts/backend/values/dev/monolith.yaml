@@ -38,34 +38,41 @@ ingress:
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/group.name: stagelog-public-api
 
-  rules:
-    - path: /api/users
-      serviceName: auth-svc
-      servicePort: 8000
+    rules:
+    - host: api.pearlinvest.click
+      http:
+        paths:
+          - path: /api/users
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8000
 
-    - path: /api/users/
-      serviceName: auth-svc
-      servicePort: 8000
+          - path: /api/events
+            pathType: Prefix
+            backend:
+              service:
+                name: events-svc
+                port:
+                  number: 8000
 
-    - path: /api/events
-      serviceName: events-svc
-      servicePort: 8000
+          - path: /api/bookmarks
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8000
 
-    - path: /api/events/
-      serviceName: events-svc
-      servicePort: 8000
-
-    - path: /api/bookmarks
-      serviceName: auth-svc
-      servicePort: 8000
-
-    - path: /api/bookmarks/
-      serviceName: auth-svc
-      servicePort: 8000
-
-    - path: /api/
-      serviceName: core-svc
-      servicePort: 8000
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: core-svc
+                port:
+                  number: 8000
 
 
 
