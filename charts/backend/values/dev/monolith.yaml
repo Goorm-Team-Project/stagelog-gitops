@@ -38,7 +38,7 @@ ingress:
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/group.name: stagelog-public-api
   
-  host: api.stagelog.com
+  host: api.pearlinvest.click
   
   rules:
     - path: /api/users
