@@ -37,42 +37,37 @@ ingress:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:430118823715:certificate/0939ee3c-791b-464a-9d1b-0fa8ab84678e
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/group.name: stagelog-public-api
-
-    rules:
-    - host: api.pearlinvest.click
-      http:
-        paths:
-          - path: /api/users
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-svc
-                port:
-                  number: 8000
-
-          - path: /api/events
-            pathType: Prefix
-            backend:
-              service:
-                name: events-svc
-                port:
-                  number: 8000
-
-          - path: /api/bookmarks
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-svc
-                port:
-                  number: 8000
-
-          - path: /api/
-            pathType: Prefix
-            backend:
-              service:
-                name: core-svc
-                port:
-                  number: 8000
+  
+  host: api.pearlinvest.click 
+  rules: 
+  - path: /api/users
+    pathType: Prefix
+    backend:
+      service:
+        name: auth-svc
+        port:
+          number: 80
+  - path: /api/events
+    pathType: Prefix
+    backend:
+      service:
+        name: events-svc
+        port:
+          number: 80
+  - path: /api/bookmarks
+    pathType: Prefix
+    backend:
+      service:
+        name: auth-svc
+        port:
+          number: 80
+  - path: /api/
+    pathType: Prefix
+    backend:
+      service:
+        name: core-svc
+        port:
+          number: 8000
 
 
 
