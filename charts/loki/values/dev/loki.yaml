@@ -36,7 +36,9 @@ loki:
         cpu: 500m
         memory: 512Mi
     persistence:
-      enabled: false
+      enabled: true
+      size: 10Gi
+      storageClass: gp2
 
   read:
     replicas: 0
