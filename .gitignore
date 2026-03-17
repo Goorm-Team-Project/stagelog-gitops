@@ -1,0 +1,24 @@
+# Helm package 의존성 files
+*.tgz
+charts/loki/charts
+charts/fluent-bit/charts
+
+# Helm temporary files
+.helmignore
+/tmp/
+
+# Local env + secrets
+values-local.yaml
+*.local.yaml
+/hack/
+
+.env
+.secrets
+secrets.yaml
+
+# IDE + Systemfiles
+.vscode/
+.idea
+.DS_Store
+*.tmp
+*.log

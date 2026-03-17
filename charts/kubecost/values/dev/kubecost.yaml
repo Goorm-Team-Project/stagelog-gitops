@@ -1,0 +1,17 @@
+cost-analyzer:
+  kubecostModel:
+    persistence:
+      enabled: false
+
+  prometheus:
+    server:
+      persistentVolume:
+        enabled: false
+
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "800m"
+      memory: "1Gi"

@@ -1,0 +1,54 @@
+kube-prometheus-stack:
+  grafana:
+    adminPassword: "admin"
+    dashboards:
+      default:
+        node-exporter:
+          gnetId: 1860
+          revision: 31
+          datasource: "Prometheus"
+        k8s-compute-resources:
+          gnetId: 315
+          revision: 3
+          datasource: "Prometheus"
+    persistence:
+      enabled: false
+    # Loki
+    additionalDatasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki.monitoring.svc.cluster.local:3100
+        isDefault: false
+        jsonData:
+          maxLines: 1000
+
+  prometheus:
+    prometheusSpec:
+      scrapeInterval: "30s" # Grafana Timeout 충돌 해결을 위한 간격 상향
+      scrapeTimeout: "10s"
+      retention: "15d"
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector:
+        matchLabels:
+          release: "prometheus-stack"
+
+  alertmanager:
+    enabled: true
+    config:
+      global:
+        resolve_timeout: 5m
+      route:
+        group_by: ['alertname']
+        receiver: 'discord'
+      receivers:
+      - name: 'discord'
+        discord_configs:
+        - webhook_url: 'https://discord.com/api/webhooks/1478914160292266166/RICxr28vSbD0NQ02dQIo8DJySAQRXQZd7XweBacdLwepsNz5D0nvE-WtG18tkmWe0Rex'
+          send_resolved: true
+    alertmanagerSpec:
+
+  prometheus-node-exporter:
+    prometheus:
+      monitor:
+        enabled: true
