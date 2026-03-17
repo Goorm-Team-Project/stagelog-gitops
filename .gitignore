@@ -1,7 +1,7 @@
 # Helm package 의존성 files
 *.tgz
-charts/loki/charts
-charts/fluent-bit/charts
+charts/*/charts/
+charts/*/Chart.lock
 
 # Helm temporary files
 .helmignore
