@@ -26,12 +26,6 @@ loki:
       max_query_series: 500
       max_query_parallelism: 2
 
-    compactor:
-      retention_enabled: true
-      compaction_Interval: 10m
-      retention_delete_delay: 2h
-      retention_delete_worker_count: 150
-
   singleBinary:
     replicas: 1
     resources:
@@ -54,17 +48,27 @@ loki:
   gateway:
     enabled: false
 
+  lokiCanary:
+    enabled: false
+
   chunksCache:
     enabled: false
   resultsCache:
     enabled: false
 
   monitoring:
+    selfMonitoring:
+      enabled: false
+      grafanaAgent:
+        installOperator: false
     serviceMonitor:
       enabled: true
       labels:
         release: prometheus-stack
 
+  sidecar:
+    rules:
+      enabled: false
+
   test:
     enabled: false
-
