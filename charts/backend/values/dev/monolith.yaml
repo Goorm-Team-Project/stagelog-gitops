@@ -45,12 +45,28 @@ ingress:
     - path: /api/users/
       serviceName: auth-svc
       servicePort: 8000
+    
+    - path: /prod/api/users/
+      serviceName: auth-svc
+      servicePort: 8000
+    
+    - path: /prod/api/users
+      serviceName: auth-svc
+      servicePort: 8000
 
     - path: /api/events
       serviceName: events-svc
       servicePort: 8000
 
     - path: /api/events/
+      serviceName: events-svc
+      servicePort: 8000
+    
+    - path: /prod/api/events
+      serviceName: events-svc
+      servicePort: 8000
+
+    - path: /prod/api/events/
       serviceName: events-svc
       servicePort: 8000
 
@@ -61,8 +77,20 @@ ingress:
     - path: /api/bookmarks/
       serviceName: auth-svc
       servicePort: 8000
+    
+    - path: /prod/api/bookmarks
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /prod/api/bookmarks/
+      serviceName: auth-svc
+      servicePort: 8000
 
     - path: /api/
+      serviceName: core-svc
+      servicePort: 8000
+
+    - path: /prod/api/
       serviceName: core-svc
       servicePort: 8000
 
