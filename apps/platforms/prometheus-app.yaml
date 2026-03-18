@@ -12,6 +12,7 @@ spec:
     targetRevision: develop
     path: charts/prometheus
     helm:
+      skipCrds: false
       valueFiles:
         - values/dev/prometheus.yaml
   destination:
@@ -24,3 +25,5 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
+      - ServerSideApply=true
+      - Replace=true

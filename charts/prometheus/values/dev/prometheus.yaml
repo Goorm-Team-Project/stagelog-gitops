@@ -2,7 +2,7 @@ kube-prometheus-stack:
   crds:
     enabled: true
     upgradeJob:
-      enabled: true
+      enabled: false
 
   # kube-system 네임스페이스에 Service/ServiceMonitor 등을 생성하는 컴포넌트 비활성화
   kubeApiServer:
