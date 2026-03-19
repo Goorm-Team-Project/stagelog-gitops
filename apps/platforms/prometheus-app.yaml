@@ -27,3 +27,4 @@ spec:
       - SkipDryRunOnMissingResource=true
       - ServerSideApply=true
       - Replace=true
+      - Force=true
