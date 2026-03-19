@@ -1,7 +1,24 @@
 name: dev-notifications
 
 deployment:
-  enabled: false
+  enabled: true
+
+replicaCount: 1
+
+image:
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-backend
+  tag: latest
+  pullPolicy: Always
+
+extraVolumeMounts:
+  - name: env-file
+    mountPath: /app/.env
+    subPath: .env
+
+extraVolumes:
+  - name: env-file
+    secret:
+      secretName: dev-secret
 
 service:
   enabled: true

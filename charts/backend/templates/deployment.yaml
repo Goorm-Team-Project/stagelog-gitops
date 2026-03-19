@@ -41,4 +41,7 @@ spec:
         {{- with .Values.extraVolumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+      {{- if (.Values.deployment.enabled | default false) }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end}}
 {{- end }}
