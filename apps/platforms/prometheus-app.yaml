@@ -4,7 +4,7 @@ metadata:
   name: prometheus-stack
   namespace: argocd
   annotations:
-    #argocd.argoproj.io/sync-wave: "-1" # external-secrets(-2) 다음에 배포
+    argocd.argoproj.io/sync-wave: "-1" # external-secrets(-2) 다음에 배포
 spec:
   project: dev-stagelog
   source:
