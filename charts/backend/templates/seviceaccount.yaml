@@ -1,0 +1,9 @@
+{{- if (.Values.serviceAccount.enabled | default false) }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.serviceAccount.name }}
+  namespace: {{ .Release.namespace }}
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .Values.serviceAccount.roleArn }}
+{{- end }}

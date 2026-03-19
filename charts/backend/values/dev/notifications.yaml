@@ -1,0 +1,21 @@
+name: dev-notifications
+
+deployment:
+  enabled: false
+
+service:
+  enabled: true
+  name: notifications-svc
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+
+secret:
+  enabled: false
+
+serviceAccount:
+  enabled: true
+  name: stagelog-backend-sa
+  roleArn: arn:aws:iam::430118823715:role/stagelog-backend-workload-role
