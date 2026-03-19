@@ -20,11 +20,6 @@ extraVolumes:
     secret:
       secretName: dev-secret
 
-serviceaccount:
-  enabled: true
-  name: stagelog-backend-sa
-  roleArn: arn:aws:iam::430118823715:role/stagelog-backend-workload-role
-
 service:
   enabled: true
   name: core-svc
@@ -38,5 +33,6 @@ secret:
   enabled: false
 
 serviceAccount:
-  enabled: false
-  
+  enabled: true
+  name: stagelog-backend-sa
+  roleArn: arn:aws:iam::430118823715:role/stagelog-backend-workload-role
