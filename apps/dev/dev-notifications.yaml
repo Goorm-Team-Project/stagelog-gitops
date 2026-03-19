@@ -17,7 +17,7 @@ spec:
 
     helm:
       valueFiles:
-        - values/dev/notification.yaml
+        - values/dev/notifications.yaml
 
   destination:
     server: https://kubernetes.default.svc
