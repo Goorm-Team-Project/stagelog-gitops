@@ -9,7 +9,7 @@ secret:
 
 serviceAccount:
   enabled: false
-  
+
 ingress:
   enabled: true
   name: stagelog-public-api
@@ -24,38 +24,38 @@ ingress:
     alb.ingress.kubernetes.io/group.name: stagelog-public-api
 
   rules:
-    - path: /prod/api/users
+    - path: /api/users
       serviceName: auth-svc
       servicePort: 8000
 
-    - path: /prod/api/users/
+    - path: /api/users/
       serviceName: auth-svc
       servicePort: 8000
 
-    - path: /prod/api/events
+    - path: /api/events
       serviceName: events-svc
       servicePort: 8000
 
-    - path: /prod/api/events/
+    - path: /api/events/
       serviceName: events-svc
       servicePort: 8000
 
-    - path: /prod/api/bookmarks
+    - path: /api/bookmarks
       serviceName: auth-svc
       servicePort: 8000
 
-    - path: /prod/api/bookmarks/
+    - path: /api/bookmarks/
       serviceName: auth-svc
       servicePort: 8000
 
-    - path: /prod/api/notifications
+    - path: /api/notifications
       serviceName: notifications-svc
       servicePort: 8000
 
-    - path: /prod/api/notifications/
+    - path: /api/notifications/
       serviceName: notifications-svc
       servicePort: 8000
 
-    - path: /prod/api/
+    - path: /api/
       serviceName: core-svc
       servicePort: 8000
