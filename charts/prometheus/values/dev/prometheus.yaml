@@ -3,7 +3,7 @@ kube-prometheus-stack:
     eks.amazonaws.com/capacityType: ON_DEMAND
 
   crds:
-    enabled: true
+    enabled: false
     upgradeJob:
       enabled: false
 
@@ -76,7 +76,7 @@ kube-prometheus-stack:
   prometheusOperator:
     nodeSelector: *onDemandNodeSelector
     admissionWebhooks:
-      enabled: false
+      enabled: true
 
   prometheus-node-exporter:
     prometheus:
