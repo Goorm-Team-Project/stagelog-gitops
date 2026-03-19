@@ -97,6 +97,8 @@ ingress:
       serviceName: core-svc
       servicePort: 8000
 
+secret:
+  enabled: false
 
 
 resources: {}

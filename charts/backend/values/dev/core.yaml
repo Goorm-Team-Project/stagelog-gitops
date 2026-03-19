@@ -28,3 +28,6 @@ service:
 
 ingress:
   enabled: false
+
+secret:
+  enabled: false
