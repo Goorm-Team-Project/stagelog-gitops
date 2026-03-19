@@ -1,0 +1,61 @@
+deployment:
+  enabled: false
+
+service:
+  enabled: false
+ 
+secret:
+  enabled: false
+
+serviceAccount:
+  enabled: false
+  
+ingress:
+  enabled: true
+  name: stagelog-public-api
+  className: alb
+
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/group.name: stagelog-public-api
+
+  rules:
+    - path: /prod/api/users
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /prod/api/users/
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /prod/api/events
+      serviceName: events-svc
+      servicePort: 8000
+
+    - path: /prod/api/events/
+      serviceName: events-svc
+      servicePort: 8000
+
+    - path: /prod/api/bookmarks
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /prod/api/bookmarks/
+      serviceName: auth-svc
+      servicePort: 8000
+
+    - path: /prod/api/notifications
+      serviceName: notifications-svc
+      servicePort: 8000
+
+    - path: /prod/api/notifications/
+      serviceName: notifications-svc
+      servicePort: 8000
+
+    - path: /prod/api/
+      serviceName: core-svc
+      servicePort: 8000
