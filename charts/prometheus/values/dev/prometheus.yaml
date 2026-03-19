@@ -76,7 +76,7 @@ kube-prometheus-stack:
   prometheusOperator:
     nodeSelector: *onDemandNodeSelector
     admissionWebhooks:
-      enabled: false
+      enabled: true
 
   prometheus-node-exporter:
     prometheus:
