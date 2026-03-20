@@ -37,7 +37,7 @@ kube-prometheus-stack:
     persistence:
       enabled: false
     # Loki
-    additionalDatasources:
+    additionalDataSources:
       - name: Loki
         type: loki
         access: proxy
