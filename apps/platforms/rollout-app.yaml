@@ -17,7 +17,7 @@ spec:
     helm:
       parameters:
         - name: installCRDs
-          value: "true"
+          value: "false"
 
         - name: controller.resources.requests.cpu
           value: "100m"
@@ -35,19 +35,6 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-rollouts
-
-  ignoreDifferences:
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      jsonPointers:
-        - /status
-        - /spec/conversion
-        - /spec/preserveUnknownFields
-
-    - group: "*"
-      kind: "*"
-      managedFieldsManagers:
-        - kube-controller-manager
 
   syncPolicy:
     automated:
