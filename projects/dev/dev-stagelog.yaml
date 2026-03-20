@@ -11,6 +11,7 @@ spec:
   sourceRepos:
     - https://github.com/Goorm-Team-Project/stagelog-gitops.git
     - https://charts.external-secrets.io
+    - https://argoproj.github.io/argo-helm
 
   destinations:
     - namespace: dev-*
