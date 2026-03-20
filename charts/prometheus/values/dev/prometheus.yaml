@@ -37,7 +37,7 @@ kube-prometheus-stack:
     persistence:
       enabled: false
     # Loki
-    additionalDatasources:
+    additionalDataSources:
       - name: Loki
         type: loki
         access: proxy
@@ -59,19 +59,12 @@ kube-prometheus-stack:
 
   alertmanager:
     enabled: true
-    config:
-      global:
-        resolve_timeout: 5m
-      route:
-        group_by: ['alertname']
-        receiver: 'discord'
-      receivers:
-      - name: 'discord'
-        discord_configs:
-        - webhook_url: 'https://discord.com/api/webhooks/1478914160292266166/RICxr28vSbD0NQ02dQIo8DJySAQRXQZd7XweBacdLwepsNz5D0nvE-WtG18tkmWe0Rex'
-          send_resolved: true
+    config: {}
     alertmanagerSpec:
       nodeSelector: *onDemandNodeSelector
+      useExistingSecret: true
+      # ESO로 생성한 Secret(키: alertmanager.yaml)을 Alertmanager에 주입
+      configSecret: alertmanager-discord-config
 
   prometheusOperator:
     nodeSelector: *onDemandNodeSelector
@@ -85,3 +78,70 @@ kube-prometheus-stack:
 
   kube-state-metrics:
     nodeSelector: *onDemandNodeSelector
+
+# ExternalSecret
+discordWebhookExternalSecret:
+  enabled: true
+  name: prometheus-discord-webhook
+  namespace: monitoring
+  secretStoreRef:
+    name: aws-parameterstore
+    kind: ClusterSecretStore
+  refreshInterval: 1h
+  target:
+    name: prometheus-discord-webhook
+    creationPolicy: Owner
+  data:
+    - secretKey: webhook-url
+      remoteRef:
+        key: /stagelog/monitoring/discord-webhook-url
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
+
+# Alertmanager 구성 전체를 SSM에서 받아 Alertmanager에 주입
+alertmanagerConfigExternalSecret:
+  enabled: true
+  name: alertmanager-discord-config
+  namespace: monitoring
+  secretStoreRef:
+    name: aws-parameterstore
+    kind: ClusterSecretStore
+  refreshInterval: 1h
+  target:
+    name: alertmanager-discord-config
+    creationPolicy: Owner
+  data:
+    - secretKey: alertmanager.yaml
+      remoteRef:
+        key: /stagelog/monitoring/alertmanager-discord-config
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
+
+# PrometheusRule
+customPrometheusRule:
+  enabled: true
+  name: custom-alerts
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+  groups:
+    - name: custom.rules
+      rules:
+        - alert: ResourceBurnerCpuHigh
+          expr: rate(container_cpu_usage_seconds_total{namespace="monitoring",pod="resource-burner",container="stress"}[1m]) > 0.08
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "resource-burner CPU near limit"
+            description: "resource-burner CPU usage is near 100m limit"
+        - alert: ResourceBurnerMemoryHigh
+          expr: container_memory_working_set_bytes{namespace="monitoring",pod="resource-burner",container="stress"} > 45 * 1024 * 1024
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "resource-burner memory high"
+            description: "resource-burner memory working set > 45Mi"
