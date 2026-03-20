@@ -59,8 +59,6 @@ kube-prometheus-stack:
 
   alertmanager:
     enabled: true
-    # useExistingSecret=true일 때 alertmanager.config는 무시됩니다.
-    # webhook_url_file 미지원 환경을 피하기 위해 config를 비웁니다.
     config: {}
     alertmanagerSpec:
       nodeSelector: *onDemandNodeSelector
@@ -116,7 +114,6 @@ alertmanagerConfigExternalSecret:
   data:
     - secretKey: alertmanager.yaml
       remoteRef:
-        # TODO: 여기에 “alertmanager.yaml 전체 내용”을 저장한 SSM 파라미터 경로를 넣으세요.
         key: /stagelog/monitoring/alertmanager-discord-config
         conversionStrategy: Default
         decodingStrategy: None
