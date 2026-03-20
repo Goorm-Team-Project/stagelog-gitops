@@ -12,6 +12,7 @@ spec:
     - https://github.com/Goorm-Team-Project/stagelog-gitops.git
     - https://charts.external-secrets.io
     - https://argoproj.github.io/argo-helm
+    - https://github.com/argoproj/argo-rollouts
 
   destinations:
     - namespace: dev-*
