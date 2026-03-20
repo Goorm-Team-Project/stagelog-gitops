@@ -42,12 +42,13 @@ spec:
       jsonPointers:
         - /status
         - /spec/conversion
+        - /spec/preserveUnknownFields
 
     - group: "*"
       kind: "*"
       managedFieldsManagers:
         - kube-controller-manager
-        
+
   syncPolicy:
     automated:
       prune: true
