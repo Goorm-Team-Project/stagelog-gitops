@@ -59,26 +59,14 @@ kube-prometheus-stack:
 
   alertmanager:
     enabled: true
-    config:
-      global:
-        resolve_timeout: 5m
-      route:
-        group_by: ['alertname', 'job']
-        receiver: 'discord'
-        group_wait: 10s
-        group_interval: 10s
-        repeat_interval: 12h
-      receivers:
-      - name: 'null'
-        # chart 기본값과의 호환용 (undefined receiver "null" 방지)
-      - name: 'discord'
-        discord_configs:
-        - webhook_url_file: /etc/alertmanager/secrets/prometheus-discord-webhook/webhook-url
-          send_resolved: true
+    # useExistingSecret=true일 때 alertmanager.config는 무시됩니다.
+    # webhook_url_file 미지원 환경을 피하기 위해 config를 비웁니다.
+    config: {}
     alertmanagerSpec:
       nodeSelector: *onDemandNodeSelector
-      secrets:
-        - prometheus-discord-webhook
+      useExistingSecret: true
+      # ESO로 생성한 Secret(키: alertmanager.yaml)을 Alertmanager에 주입
+      configSecret: alertmanager-discord-config
 
   prometheusOperator:
     nodeSelector: *onDemandNodeSelector
@@ -109,6 +97,27 @@ discordWebhookExternalSecret:
     - secretKey: webhook-url
       remoteRef:
         key: /stagelog/monitoring/discord-webhook-url
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
+
+# Alertmanager 구성 전체를 SSM에서 받아 Alertmanager에 주입
+alertmanagerConfigExternalSecret:
+  enabled: true
+  name: alertmanager-discord-config
+  namespace: monitoring
+  secretStoreRef:
+    name: aws-parameterstore
+    kind: ClusterSecretStore
+  refreshInterval: 1h
+  target:
+    name: alertmanager-discord-config
+    creationPolicy: Owner
+  data:
+    - secretKey: alertmanager.yaml
+      remoteRef:
+        # TODO: 여기에 “alertmanager.yaml 전체 내용”을 저장한 SSM 파라미터 경로를 넣으세요.
+        key: /stagelog/monitoring/alertmanager-discord-config
         conversionStrategy: Default
         decodingStrategy: None
         metadataPolicy: None
