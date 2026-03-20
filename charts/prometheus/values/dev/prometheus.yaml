@@ -65,7 +65,12 @@ kube-prometheus-stack:
       route:
         group_by: ['alertname']
         receiver: 'discord'
+        group_wait: 10s
+        group_interval: 10s
+        repeat_interval: 12h
       receivers:
+      - name: 'null'
+        # chart 기본값과의 호환용 (undefined receiver "null" 방지)
       - name: 'discord'
         discord_configs:
         - webhook_url: 'https://discord.com/api/webhooks/1478914160292266166/RICxr28vSbD0NQ02dQIo8DJySAQRXQZd7XweBacdLwepsNz5D0nvE-WtG18tkmWe0Rex'
