@@ -63,7 +63,7 @@ kube-prometheus-stack:
       global:
         resolve_timeout: 5m
       route:
-        group_by: ['alertname']
+        group_by: ['alertname', 'job']  # job 포함 시 Discord 빈 메시지 오류 방지
         receiver: 'discord'
         group_wait: 10s
         group_interval: 10s
