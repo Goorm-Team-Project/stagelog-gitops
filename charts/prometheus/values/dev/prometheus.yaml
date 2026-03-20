@@ -73,10 +73,12 @@ kube-prometheus-stack:
         # chart 기본값과의 호환용 (undefined receiver "null" 방지)
       - name: 'discord'
         discord_configs:
-        - webhook_url: 'https://discord.com/api/webhooks/1484360294120820766/Cr-uxvkwGphDwyMS0GnIMGE8cgIaAAtTks159QVvj9D8b9dFbUzGTYN-MIEINpRCpz_I'
+        - webhook_url_file: /etc/alertmanager/secrets/prometheus-discord-webhook/webhook-url
           send_resolved: true
     alertmanagerSpec:
       nodeSelector: *onDemandNodeSelector
+      secrets:
+        - prometheus-discord-webhook
 
   prometheusOperator:
     nodeSelector: *onDemandNodeSelector
@@ -90,3 +92,47 @@ kube-prometheus-stack:
 
   kube-state-metrics:
     nodeSelector: *onDemandNodeSelector
+
+# ExternalSecret
+discordWebhookExternalSecret:
+  enabled: true
+  name: prometheus-discord-webhook
+  namespace: monitoring
+  secretStoreRef:
+    name: aws-parameterstore
+    kind: ClusterSecretStore
+  refreshInterval: 1h
+  target:
+    name: prometheus-discord-webhook
+    creationPolicy: Owner
+  data:
+    - secretKey: webhook-url
+      remoteRef:
+        key: /stagelog/monitoring/discord-webhook-url
+
+# PrometheusRule
+customPrometheusRule:
+  enabled: true
+  name: custom-alerts
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+  groups:
+    - name: custom.rules
+      rules:
+        - alert: ResourceBurnerCpuHigh
+          expr: rate(container_cpu_usage_seconds_total{namespace="monitoring",pod="resource-burner",container="stress"}[1m]) > 0.08
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "resource-burner CPU near limit"
+            description: "resource-burner CPU usage is near 100m limit"
+        - alert: ResourceBurnerMemoryHigh
+          expr: container_memory_working_set_bytes{namespace="monitoring",pod="resource-burner",container="stress"} > 45 * 1024 * 1024
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "resource-burner memory high"
+            description: "resource-burner memory working set > 45Mi"
