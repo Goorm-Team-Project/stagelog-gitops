@@ -28,6 +28,9 @@ spec:
     
     - namespace: default
       server: https://kubernetes.default.svc
+    
+    - namespace: argo-rollouts
+      server: https://kubernetes.default.svc
 
   clusterResourceWhitelist:
     - group: '*'
