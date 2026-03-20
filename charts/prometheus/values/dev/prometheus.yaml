@@ -73,18 +73,12 @@ kube-prometheus-stack:
         # chart 기본값과의 호환용 (undefined receiver "null" 방지)
       - name: 'discord'
         discord_configs:
-        - webhook_url_file: /etc/alertmanager/discord-webhook/webhook-url
+        - webhook_url_file: /etc/alertmanager/secrets/prometheus-discord-webhook/webhook-url
           send_resolved: true
     alertmanagerSpec:
       nodeSelector: *onDemandNodeSelector
-      volumes:
-        - name: discord-webhook
-          secret:
-            secretName: prometheus-discord-webhook
-      volumeMounts:
-        - name: discord-webhook
-          mountPath: /etc/alertmanager/discord-webhook
-          readOnly: true
+      secrets:
+        - prometheus-discord-webhook
 
   prometheusOperator:
     nodeSelector: *onDemandNodeSelector
