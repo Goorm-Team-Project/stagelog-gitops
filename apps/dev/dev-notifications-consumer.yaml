@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: dev-notifications-api
+  name: dev-notifications-consumer
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
