@@ -24,6 +24,10 @@ spec:
     - namespace: monitoring
       server: https://kubernetes.default.svc
 
+    # kube-prometheus-stack: kubeApiServer / coreDns / kube-proxy ServiceMonitor·Service 등
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+
     - namespace: kubecost
       server: https://kubernetes.default.svc
     
