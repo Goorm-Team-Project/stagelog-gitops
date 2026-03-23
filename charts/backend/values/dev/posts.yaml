@@ -24,11 +24,11 @@ secret:
 
 serviceAccount:
   enabled: true
-  create: false
+  create: true
   name: stagelog-posts-sa
-  roleArn: arn:aws:iam::430118823715:role/stagelog-backend-workload-role
+  roleArn: arn:aws:iam::430118823715:role/posts_workload
 
-envFromSecret: stagelog-posts-env
+envFromSecret: dev-posts-secret
 
 env:
   - name: DJANGO_SETTINGS_MODULE

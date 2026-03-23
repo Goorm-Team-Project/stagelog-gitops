@@ -21,6 +21,10 @@ spec:
         app: {{ .Values.name }}
 
     spec:
+      {{- if (.Values.deployment.enabled | default false) }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end}}
+
       containers:
         - name: {{ .Values.name }}
 
@@ -32,16 +36,17 @@ spec:
 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-                {{- with .Values.extraVolumeMounts }}
-                {{- toYaml . | nindent 12 }}
-                {{- end }}
+          
+          {{- if .Values.envFromSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.envFromSecret }}
+          {{- end }}
 
-      volumes:
-        {{- with .Values.extraVolumes }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-      {{- if (.Values.deployment.enabled | default false) }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
-      {{- end}}
+          {{- if .Values.env }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+          {{- end }}
+          
+      
 {{- end }}
