@@ -23,7 +23,7 @@ serviceAccount:
   enabled: true
   create: true
   name: stagelog-outbox-worker-sa
-  roleArn: arn:aws:iam::430118823715:role/outbox_worker_workload
+  roleArn: arn:aws:iam::430118823715:role/stagelog-outbox-worker-workload-role
 
 envFromSecret: dev-outboxworker-secret
 

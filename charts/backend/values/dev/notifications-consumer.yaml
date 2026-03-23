@@ -23,7 +23,7 @@ serviceAccount:
   enabled: true
   create: true
   name: stagelog-notifications-consumer-sa
-  roleArn: arn:aws:iam::430118823715:role/notifications_consumer_workload
+  roleArn: arn:aws:iam::430118823715:role/stagelog-notifications-consumer-workload-role
 
 envFromSecret: dev-notifications-secret
 

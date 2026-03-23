@@ -26,7 +26,7 @@ serviceAccount:
   enabled: true
   create: true
   name: stagelog-posts-sa
-  roleArn: arn:aws:iam::430118823715:role/posts_workload
+  roleArn: arn:aws:iam::430118823715:role/stagelog-posts-workload-role
 
 envFromSecret: dev-posts-secret
 
