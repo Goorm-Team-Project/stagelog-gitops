@@ -11,6 +11,8 @@ spec:
   sourceRepos:
     - https://github.com/Goorm-Team-Project/stagelog-gitops.git
     - https://charts.external-secrets.io
+    - https://argoproj.github.io/argo-helm
+    - https://github.com/argoproj/argo-rollouts
 
   destinations:
     - namespace: dev-*
@@ -26,6 +28,9 @@ spec:
       server: https://kubernetes.default.svc
     
     - namespace: default
+      server: https://kubernetes.default.svc
+    
+    - namespace: argo-rollouts
       server: https://kubernetes.default.svc
 
   clusterResourceWhitelist:
