@@ -6,7 +6,7 @@ deployment:
 replicaCount: 1
 
 image:
-  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-backend
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-posts
   tag: latest
   pullPolicy: Always
 
