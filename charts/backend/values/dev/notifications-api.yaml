@@ -1,0 +1,43 @@
+name: dev-notifications-api
+
+deployment:
+  enabled: true
+
+replicaCount: 1
+
+image:
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-notifications
+  tag: latest
+  pullPolicy: Always
+
+service:
+  enabled: true
+  name: notifications-svc
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+
+secret:
+  enabled: false
+
+serviceAccount:
+  enabled: true
+  create: true
+  name: stagelog-notifications-api-sa
+  roleArn: arn:aws:iam::430118823715:role/notifications_api_workload
+
+envFromSecret: dev-notifications-secret
+
+env:
+  - name: DJANGO_SETTINGS_MODULE
+    value: config.settings
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 400m
+    memory: 512Mi

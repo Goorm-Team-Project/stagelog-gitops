@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: dev-notifications
+  name: dev-notifications-api
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -17,7 +17,7 @@ spec:
 
     helm:
       valueFiles:
-        - values/dev/notifications.yaml
+        - values/dev/notifications-api.yaml
 
   destination:
     server: https://kubernetes.default.svc
