@@ -57,5 +57,5 @@ ingress:
       servicePort: 8000
 
     - path: /api/
-      serviceName: core-svc
+      serviceName: posts-svc
       servicePort: 8000
