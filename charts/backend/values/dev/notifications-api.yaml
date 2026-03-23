@@ -7,7 +7,7 @@ replicaCount: 1
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-notifications
-  tag: latest
+  tag: 3eff1bb1bca2
   pullPolicy: Always
 
 service:
