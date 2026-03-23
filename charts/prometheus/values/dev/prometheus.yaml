@@ -7,9 +7,9 @@ kube-prometheus-stack:
     upgradeJob:
       enabled: false
 
-  # kube-system 네임스페이스에 Service/ServiceMonitor 등을 생성하는 컴포넌트 비활성화
+  # EKS : 워커에서 관측 가능한 컴포넌트는 스크랩,알림 활성화. etcd/스케줄러/컨트롤러 매니저는 AWS 관리라 비활성화
   kubeApiServer:
-    enabled: false
+    enabled: true
   kubeControllerManager:
     enabled: false
   kubeScheduler:
@@ -17,9 +17,17 @@ kube-prometheus-stack:
   kubeEtcd:
     enabled: false
   kubeProxy:
-    enabled: false
+    enabled: true
   coreDns:
-    enabled: false
+    enabled: true
+
+  # 클러스터에 없는 컴포넌트(etcd 등)에 대한 기본 알림은 끄고 오탐을 줄임
+  defaultRules:
+    rules:
+      etcd: false
+      kubeControllerManager: false
+      kubeSchedulerAlerting: false
+      kubeSchedulerRecording: false
 
   grafana:
     nodeSelector: *onDemandNodeSelector
@@ -145,3 +153,51 @@ customPrometheusRule:
           annotations:
             summary: "resource-burner memory high"
             description: "resource-burner memory working set > 45Mi"
+
+    # (kube-prometheus-stack의 기본 알림인 TargetDown 과 유사하나 잡 단위로 바로 식별 가능)
+    - name: platform.monitoring
+      rules:
+        - alert: KubeStateMetricsTargetDown
+          expr: up{job="kube-state-metrics"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "kube-state-metrics 메트릭 수집 중단"
+            description: "클러스터 상태 메트릭이 끊겼습니다. Pod·ServiceMonitor·네트워크를 확인하세요."
+
+    # EKS 보조 알림 (차트 기본 규칙과 중복 최소화)
+    - name: eks.essentials
+      rules:
+        - alert: EKSCoreDNSReplicasMismatch
+          expr: |
+            kube_deployment_spec_replicas{namespace="kube-system", job="kube-state-metrics", deployment="coredns"}
+              != kube_deployment_status_replicas_available{namespace="kube-system", job="kube-state-metrics", deployment="coredns"}
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CoreDNS 가용 레플리카가 spec과 불일치"
+            description: "kube-system/coredns 스케줄·노드·리소스를 확인하세요. DNS 장애는 전체 워크로드에 영향을 줍니다."
+
+        - alert: EKSVPCCNIDaemonSetNotReady
+          expr: |
+            kube_daemonset_status_desired_number_scheduled{namespace="kube-system", job="kube-state-metrics", daemonset="aws-node"}
+              > kube_daemonset_status_number_ready{namespace="kube-system", job="kube-state-metrics", daemonset="aws-node"}
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "aws-node DaemonSet 준비 수 불일치"
+            description: "VPC CNI(aws-node)가 모든 노드에서 준비되지 않았습니다. ENI·파드 IP·네트워크 플러그인 로그를 확인하세요."
+
+        - alert: EKSMetricsServerUnavailable
+          expr: |
+            kube_deployment_spec_replicas{namespace="kube-system", job="kube-state-metrics", deployment="metrics-server"}
+              != kube_deployment_status_replicas_available{namespace="kube-system", job="kube-state-metrics", deployment="metrics-server"}
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "metrics-server 가용 레플리카 불일치"
+            description: "HPA·kubectl top 등에 영향이 있을 수 있습니다. EKS 애드온 또는 배포 상태를 확인하세요."
