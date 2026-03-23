@@ -1,0 +1,40 @@
+name: dev-outboxworker
+
+deployment:
+  enabled: true
+
+replicaCount: 1
+
+image:
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-outbox-worker
+  tag: latest
+  pullPolicy: Always
+
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+secret:
+  enabled: false
+
+serviceAccount:
+  enabled: true
+  create: true
+  name: stagelog-outbox-worker-sa
+  roleArn: arn:aws:iam::430118823715:role/outbox_worker_workload
+
+envFromSecret: dev-outboxworker-secret
+
+env:
+  - name: DJANGO_SETTINGS_MODULE
+    value: config.settings
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 384Mi

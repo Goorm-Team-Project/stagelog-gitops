@@ -21,7 +21,7 @@ spec:
         app: {{ .Values.name }}
 
     spec:
-      {{- if (.Values.deployment.enabled | default false) }}
+      {{- if (.Values.serviceAccount.enabled | default false) }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       {{- end}}
 
@@ -31,11 +31,15 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 
+          {{- if .Values.service.enabled }}
           ports:
             - containerPort: {{ .Values.service.port }}
-
+          {{- end }}
+          
+          {{- if .Values.resources }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
           
           {{- if .Values.envFromSecret }}
           envFrom:
