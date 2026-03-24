@@ -36,3 +36,11 @@ envFromSecret: dev-auth-secret
 env:
   - name: DJANGO_SETTINGS_MODULE
     value: config.settings
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 400m
+    memory: 512Mi

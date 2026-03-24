@@ -31,6 +31,14 @@ spec:
 
         - name: dashboard.enabled
           value: "true"
+        - name: dashboard.resources.requests.cpu
+          value: "50m"
+        - name: dashboard.resources.requests.memory
+          value: "64Mi"
+        - name: dashboard.resources.limits.cpu
+          value: "100m"
+        - name: dashboard.resources.limits.memory
+          value: "128Mi"
 
   destination:
     server: https://kubernetes.default.svc

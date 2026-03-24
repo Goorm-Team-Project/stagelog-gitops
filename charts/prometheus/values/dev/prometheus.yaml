@@ -42,6 +42,14 @@ kube-prometheus-stack:
           gnetId: 315
           revision: 3
           datasource: "Prometheus"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
     persistence:
       enabled: false
     # Loki
@@ -64,6 +72,13 @@ kube-prometheus-stack:
       serviceMonitorSelector:
         matchLabels:
           release: "prometheus-stack"
+      resources:
+        requests:
+          cpu: 500m
+          memory: 2Gi # 수집 데이터 양에 따라 1Gi ~ 4Gi 사이 조절
+        limits:
+          cpu: 1000m
+          memory: 4Gi # 메모리 Limit을 넘기면 DB가 깨질 수 있으므로 여유있게 할당
 
   alertmanager:
     enabled: true
@@ -73,19 +88,47 @@ kube-prometheus-stack:
       useExistingSecret: true
       # ESO로 생성한 Secret(키: alertmanager.yaml)을 Alertmanager에 주입
       configSecret: alertmanager-discord-config
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 128Mi
 
   prometheusOperator:
     nodeSelector: *onDemandNodeSelector
     admissionWebhooks:
       enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
 
   prometheus-node-exporter:
     prometheus:
       monitor:
         enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 150m
+        memory: 128Mi
 
   kube-state-metrics:
     nodeSelector: *onDemandNodeSelector
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 150m
+        memory: 256Mi
 
 # ExternalSecret
 discordWebhookExternalSecret:
