@@ -71,14 +71,7 @@ kube-prometheus-stack:
       serviceMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelector:
         matchLabels:
-          release: "prometheus-stack"
-      resources:
-        requests:
-          cpu: 500m     
-          memory: 2Gi    
-        limits:
-          cpu: 1000m      
-          memory: 4Gi    
+          release: "prometheus-stack" 
 
   alertmanager:
     enabled: true
