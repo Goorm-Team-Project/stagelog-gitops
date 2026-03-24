@@ -13,7 +13,7 @@ replicaCount: 1
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-auth
-  tag: 441a49d7480e
+  tag: 19c98e2e742a
   pullPolicy: Always
 
 service:
