@@ -3,7 +3,7 @@ kube-prometheus-stack:
     eks.amazonaws.com/capacityType: ON_DEMAND
 
   crds:
-    enabled: true
+    enabled: false
     upgradeJob:
       enabled: false
 
