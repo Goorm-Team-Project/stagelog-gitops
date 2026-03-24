@@ -1,6 +1,11 @@
-{{- if (.Values.deployment.enabled | default false) }}
+{{- if .Values.rollout.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+{{- else if .Values.deployment.enabled | default false}}
 apiVersion: apps/v1
 kind: Deployment
+{{- end }}
+
 
 metadata:
   name: {{  include "backend.fullname" . }}
@@ -13,6 +18,14 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.name }}
+  
+  {{- if .Values.rollout.enabled }}
+  strategy:
+    blueGreen:
+      activeService: {{ .Values.rollout.activeService }}
+      previewService: {{ .Values.rollout.previewService }}
+      autoPromotionEnabled: false
+  {{- end }}
 
   template:
     metadata:
@@ -63,4 +76,3 @@ spec:
           {{- end }}
           
       
-{{- end }}

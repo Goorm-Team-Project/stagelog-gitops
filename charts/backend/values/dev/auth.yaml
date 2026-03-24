@@ -1,5 +1,11 @@
 name: dev-auth
 
+rollout:
+  enabled: true
+  activeService: auth-svc
+  previewService: auth-svc-preview
+
+
 deployment:
   enabled: true
 
