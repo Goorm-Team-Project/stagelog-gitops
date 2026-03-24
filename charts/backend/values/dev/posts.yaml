@@ -12,7 +12,7 @@ replicaCount: 1
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-posts
-  tag: 817be585d5c5
+  tag: 16ad7aef255d
   pullPolicy: Always
 
 service:
