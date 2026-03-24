@@ -3,9 +3,9 @@ kube-prometheus-stack:
     eks.amazonaws.com/capacityType: ON_DEMAND
 
   crds:
-    enabled: false
+    enabled: true
     upgradeJob:
-      enabled: false
+      enabled: true
 
   # EKS : 워커에서 관측 가능한 컴포넌트는 스크랩,알림 활성화. etcd/스케줄러/컨트롤러 매니저는 AWS 관리라 비활성화
   kubeApiServer:
@@ -94,6 +94,8 @@ kube-prometheus-stack:
     nodeSelector: *onDemandNodeSelector
     admissionWebhooks:
       enabled: true
+      patch:
+        enabled: true
     resources:
       requests:
         cpu: 50m
