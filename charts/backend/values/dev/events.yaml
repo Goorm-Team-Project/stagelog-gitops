@@ -12,7 +12,7 @@ replicaCount: 1
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-events
-  tag: 895eab668fad
+  tag: ff5dde8cd4f2
   pullPolicy: Always
 
 service:
