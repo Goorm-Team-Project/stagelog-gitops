@@ -1,7 +1,12 @@
 name: dev-notifications-api
 
-deployment:
+rollout:
   enabled: true
+  activeService: notifications-svc
+  previewService: notifications-svc-preview
+
+deployment:
+  enabled: false
 
 replicaCount: 1
 
@@ -41,3 +46,21 @@ resources:
   limits:
     cpu: 400m
     memory: 512Mi
+
+readinessProbe:
+  enabled: true
+  path: /
+  port: 8000
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+livenessProbe:
+  enabled: true
+  path: /
+  port: 8000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
