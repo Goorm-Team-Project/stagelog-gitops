@@ -6,7 +6,7 @@ rollout:
   previewService: events-svc-preview
 
 deployment:
-  enabled: true
+  enabled: false
 
 replicaCount: 1
 

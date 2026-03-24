@@ -1,6 +1,6 @@
-{{- if .Values.deployment.enabled }}
-apiVersion: apps/v1
-kind: Deployment
+{{- if .Values.rollout.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 
 metadata:
   name: {{  include "backend.fullname" . }}
@@ -92,6 +92,4 @@ spec:
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- end }}
 
-{{- end}}
-          
-      
+{{- end }}      

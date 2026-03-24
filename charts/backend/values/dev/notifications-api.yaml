@@ -6,7 +6,7 @@ rollout:
   previewService: notifications-svc-preview
 
 deployment:
-  enabled: true
+  enabled: false
 
 replicaCount: 1
 
