@@ -82,10 +82,21 @@ spec:
           {{- end }}
 
           {{- if .Values.livenessProbe.enabled }}
+          
           livenessProbe:
+            {{- if eq .Values.livenessProbe.type "http"}}
             httpGet:
               path: {{ .Values.livenessProbe.path }}
               port: {{ .Values.livenessProbe.port }}
+            {{- end}}
+
+            {{- if eq .Values.livenessProbe.type "path"}}
+            exec:
+              command:
+                {{- toYaml .Values.livenessProbe.exec.command | nindent 6 }}
+
+
+            {{- end}}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}

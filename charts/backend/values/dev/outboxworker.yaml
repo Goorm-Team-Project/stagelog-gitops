@@ -46,5 +46,11 @@ readinessProbe:
   enabled: false
   
 livenessProbe:
-  enabled: false
+  enabled: true
+  type: exec
+  exec:
+    command:
+      - sh
+      - -c
+      - pgrep -f worker
  
