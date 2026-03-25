@@ -245,7 +245,7 @@
             },
             "direction": "backward",
             "editorMode": "code",
-            "expr": "{kubernetes_namespace_name=\"dev-backend\", kubernetes_pod_name=~\"stagelog-notification-consumer.*\"}",
+            "expr": "{kubernetes_namespace_name=\"dev-backend\", kubernetes_pod_name=~\"backend-dev-notifications-consumer.*\"}",
             "queryType": "range",
             "refId": "A"
           }
