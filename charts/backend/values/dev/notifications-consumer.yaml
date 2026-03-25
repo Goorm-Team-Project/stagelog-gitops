@@ -67,7 +67,7 @@ livenessProbe:
     command:
       - sh
       - -c
-      - pgrep -f worker
+      - "ps -ef | grep '[g]unicorn'"
   initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 2

@@ -52,7 +52,7 @@ livenessProbe:
     command:
       - sh
       - -c
-      - ps -ef | grep '[p]ublish_outbox'
+      - "ps -ef | grep '[p]ublish_outbox'"
   initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 2
