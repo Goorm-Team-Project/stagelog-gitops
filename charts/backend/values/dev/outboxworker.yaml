@@ -21,7 +21,6 @@ ingress:
 
 secret:
   enabled: false
-  create: false
 
 serviceAccount:
   enabled: true
@@ -53,7 +52,7 @@ livenessProbe:
     command:
       - sh
       - -c
-      - pgrep -f worker
+      - ps -ef | grep '[p]ublish_outbox'
   initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 2
