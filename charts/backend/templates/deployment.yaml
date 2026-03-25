@@ -84,7 +84,7 @@ spec:
             {{- if eq .Values.livenessProbe.type "exec"}}
             exec:
               command:
-                {{- toYaml .Values.livenessProbe.exec.command | nindent 8 }}
+                {{- toYaml .Values.livenessProbe.exec.command | nindent 12 }}
             {{- end}}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
