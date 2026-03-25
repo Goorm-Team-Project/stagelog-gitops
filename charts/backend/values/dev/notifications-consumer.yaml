@@ -67,7 +67,7 @@ livenessProbe:
     command:
       - sh
       - -c
-      - "ps -ef | grep '[g]unicorn'"
+      - "ps -ef | grep '[c]onsume_notification_queue'"
   initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 2
