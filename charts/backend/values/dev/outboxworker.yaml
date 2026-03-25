@@ -10,7 +10,7 @@ replicaCount: 1
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-outbox-worker
-  tag: 35912cae402b
+  tag: 36bde8468b95
   pullPolicy: Always
 
 service:
