@@ -20,6 +20,19 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argocd
 
+  ignoreDifferences:
+  # Deployment용
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
+  
+  # Rollout용 (Argo Rollout API 그룹)
+  - group: argoproj.io
+    kind: Rollout
+    jsonPointers:
+    - /spec/replicas
+
   syncPolicy:
     automated:
       prune: true
