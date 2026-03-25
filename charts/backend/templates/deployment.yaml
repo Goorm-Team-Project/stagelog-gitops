@@ -12,15 +12,7 @@ spec:
 
   selector:
     matchLabels:
-      app: {{ .Values.name }}
-  
-  {{- if .Values.rollout.enabled }}
-  strategy:
-    blueGreen:
-      activeService: {{ .Values.rollout.activeService }}
-      previewService: {{ .Values.rollout.previewService }}
-      autoPromotionEnabled: false
-  {{- end }}
+      app: {{ .Values.name }}   
 
   template:
     metadata:

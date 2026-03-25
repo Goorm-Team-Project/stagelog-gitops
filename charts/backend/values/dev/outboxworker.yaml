@@ -21,6 +21,7 @@ ingress:
 
 secret:
   enabled: false
+  create: false
 
 serviceAccount:
   enabled: true
