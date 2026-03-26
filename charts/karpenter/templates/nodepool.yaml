@@ -28,8 +28,8 @@ spec:
       
   disruption:
     consolidationPolicy: WhenEmptyOrUnderutilized # 노드가 비어있거나 과소 활용될 때 통합
-    consolidateAfter: 1m # 노드가 과소 활용된 지 1분 뒤에 통합 시도
-    expireAfter: 5m # 테스트용: 노드 생성 5분 후 강제 교체 유도
+    consolidateAfter: 5m # 노드가 과소 활용된 지 1분 뒤에 통합 시도
+    expireAfter: 15m # 테스트용: 노드 생성 5분 후 강제 교체 유도
 
   limits:
     cpu: "10" 
