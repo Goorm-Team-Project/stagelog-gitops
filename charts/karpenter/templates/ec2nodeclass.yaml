@@ -7,8 +7,7 @@ spec:
   role: {{ .Values.nodeRole }}
 
   amiSelectorTerms:
-    - tags:
-        karpenter.sh/discovery: "amazon-eks-node-1.34-*"
+    - alias: al2023@latest
   subnetSelectorTerms:
   - tags:
       karpenter.sh/discovery: {{ .Values.clusterName }}
