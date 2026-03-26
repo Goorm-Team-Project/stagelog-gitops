@@ -22,3 +22,6 @@ secrets.yaml
 .DS_Store
 *.tmp
 *.log
+
+#
+.secret

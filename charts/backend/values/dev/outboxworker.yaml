@@ -46,7 +46,7 @@ readinessProbe:
   enabled: false
   
 livenessProbe:
-  enabled: true
+  enabled: false
   type: exec
   exec:
     command:
