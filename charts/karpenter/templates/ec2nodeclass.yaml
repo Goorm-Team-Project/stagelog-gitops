@@ -4,15 +4,15 @@ metadata:
   name: default
 spec:
   amiFamily: AL2 # Amazon Linux 2
-  role: "stagelog-karpenter-node-role"
+  role: {{ .Values.nodeRole }}
   subnetSelectorTerms:
   - tags:
-      karpenter.sh/discovery: "stagelog-eks"
+      karpenter.sh/discovery: {{ .Values.clusterName }}
 
   securityGroupSelectorTerms:
   - tags:
-      karpenter.sh/discovery: "stagelog-eks"
-  
+      karpenter.sh/discovery: {{ .Values.clusterName }}
+
   tags:
     Name: "stagelog-karpenter-node"
     intent: "apps"

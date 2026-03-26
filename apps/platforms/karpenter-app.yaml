@@ -9,6 +9,9 @@ spec:
     repoURL: 'https://github.com/Goorm-Team-Project/stagelog-gitops.git'
     targetRevision: develop
     path: charts/karpenter
+    helm:
+      valueFiles:
+        - values/dev/karpenter.yaml
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: karpenter
