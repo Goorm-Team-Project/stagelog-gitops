@@ -25,6 +25,11 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       {{- end}}
 
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
+
       containers:
         - name: {{ .Values.name }}
 

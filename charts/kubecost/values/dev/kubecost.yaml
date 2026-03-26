@@ -1,6 +1,6 @@
 cost-analyzer:
   nodeSelector:
-    eks.amazonaws.com/capacityType: ON_DEMAND
+    karpenter.sh/capacity-type: spot
 
   persistentVolume:
     enabled: false
@@ -11,6 +11,8 @@ cost-analyzer:
 
   prometheus:
     server:
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: "stagelog_nodes_on_demand"
       persistentVolume:
         enabled: false
       resources:

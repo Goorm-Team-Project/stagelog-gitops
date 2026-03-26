@@ -1,0 +1,5 @@
+apiVersion: v2
+name: karpenter
+description: 실시간 부하 대응을 위한 Karpenter 설정 차트
+type: application
+version: 0.1.0

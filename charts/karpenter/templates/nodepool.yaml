@@ -1,0 +1,34 @@
+apiVersion: karpenter.k8s.aws/v1beta1
+kind: NodePool
+metadata:
+  name: default
+spec:
+  template:
+    spec:
+      nodeClassRef:
+          name: default
+      requirements:
+        - key: "karpenter.sh/capacity-type"
+          operator: In
+          values: ["spot", "on-demand"]
+        - key: "karpenter.k8s.aws/instance-category"
+          operator: In
+          values: ["c", "m", "r"] # CPU, Memory, Storage
+        - key: "karpenter.k8s.aws/instance-size"
+          operator: In
+          values: ["medium", "large", "xlarge"] # 적당한 크기 위주로 사용
+        - key: "kubernetes.io/arch"
+          operator: In
+          values: ["amd64"] # Architecture
+        - key: "topology.kubernetes.io/zone"
+          operator: In
+          values: ["ap-northeast-2a", "ap-northeast-2c"]
+      
+  disruption:
+    consolidationPolicy: WhenEmptyOrUnderutilized # 노드가 비어있거나 과소 활용될 때 통합
+    consolidateAfter: 1m # 노드가 과소 활용된 지 1분 뒤에 통합 시도
+    expireAfter: 5m # 테스트용: 노드 생성 5분 후 강제 교체 유도
+
+  limits:
+    cpu: "10" 
+    memory: "20Gi"

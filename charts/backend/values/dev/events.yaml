@@ -10,6 +10,15 @@ deployment:
 
 replicaCount: 1
 
+hpa:
+  enabled: true
+  kind: Rollout
+  minReplicas: 1
+  maxReplicas: 5
+
+nodeSelector:
+  karpenter.sh/capacity-type: spot
+
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-events
   tag: ff5dde8cd4f2

@@ -28,6 +28,8 @@ loki:
 
   singleBinary:
     replicas: 1
+    nodeSelector:
+      eks.amazonaws.com/nodegroup: "stagelog-node-group-on-demand"
     resources:
       requests:
         cpu: 100m
