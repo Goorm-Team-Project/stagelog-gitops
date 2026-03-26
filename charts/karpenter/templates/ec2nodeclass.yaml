@@ -8,7 +8,7 @@ spec:
 
   amiSelectorTerms:
     - tags:
-        karpenter.sh/discovery: {{ .Values.clusterName }}
+        karpenter.sh/discovery: "amazon-eks-node-1.34-*"
   subnetSelectorTerms:
   - tags:
       karpenter.sh/discovery: {{ .Values.clusterName }}
