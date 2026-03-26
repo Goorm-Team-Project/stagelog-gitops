@@ -5,6 +5,10 @@ metadata:
 spec:
   amiFamily: AL2 # Amazon Linux 2
   role: {{ .Values.nodeRole }}
+
+  amiSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{ .Values.clusterName }}
   subnetSelectorTerms:
   - tags:
       karpenter.sh/discovery: {{ .Values.clusterName }}
