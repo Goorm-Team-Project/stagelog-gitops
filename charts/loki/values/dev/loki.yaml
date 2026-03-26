@@ -29,7 +29,7 @@ loki:
   singleBinary:
     replicas: 1
     nodeSelector:
-      eks.amazonaws.com/nodegroup: "stagelog-node-group-on-demand"
+        karpenter.sh/capacity-type: on-demand
     resources:
       requests:
         cpu: 100m

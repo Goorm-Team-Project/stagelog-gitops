@@ -12,7 +12,7 @@ cost-analyzer:
   prometheus:
     server:
       nodeSelector:
-        eks.amazonaws.com/nodegroup: "stagelog_nodes_on_demand"
+        karpenter.sh/capacity-type: on-demand
       persistentVolume:
         enabled: false
       resources:
