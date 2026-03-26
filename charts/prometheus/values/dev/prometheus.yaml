@@ -92,7 +92,6 @@ kube-prometheus-stack:
 
   prometheusOperator:
     enabled: true
-    nodeSelector: *onDemandNodeSelector
     admissionWebhooks:
       enabled: true
       patch:

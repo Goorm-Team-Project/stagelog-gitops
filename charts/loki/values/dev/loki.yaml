@@ -28,8 +28,23 @@ loki:
 
   singleBinary:
     replicas: 1
-    nodeSelector:
-        karpenter.sh/capacity-type: on-demand
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            # 1. Fargate 제외 (기존 유지)
+            - key: eks.amazonaws.com/compute-type
+              operator: NotIn
+              values:
+              - fargate
+            # 2. Karpenter 노드풀 또는 기존 노드그룹 둘 중 하나만 있으면 OK
+            - key: karpenter.sh/nodepool
+              operator: Exists
+          - matchExpressions:
+            - key: eks.amazonaws.com/nodegroup
+              operator: Exists
     resources:
       requests:
         cpu: 100m
