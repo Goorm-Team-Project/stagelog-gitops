@@ -13,6 +13,9 @@ secret:
 serviceAccount:
   enabled: false
 
+hpa:
+  enabled: false
+
 ingress:
   enabled: true
   name: stagelog-public-api
