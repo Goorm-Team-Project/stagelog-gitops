@@ -25,7 +25,6 @@ ingress:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/group.name: stagelog-public-api
-    alb.ingress.kubernetes.io/security-groups: sg-011e386b2cc42ea73
     
 
   rules:
