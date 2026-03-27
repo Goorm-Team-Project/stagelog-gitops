@@ -9,11 +9,7 @@ deployment:
 replicaCount: 1
 
 hpa:
-  enabled: true
-  apiVersion: apps/v1
-  kind: Deployment
-  minReplicas: 1
-  maxReplicas: 5
+  enabled: false
 
 nodeSelector:
   karpenter.sh/capacity-type: spot
