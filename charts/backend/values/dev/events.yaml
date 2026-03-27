@@ -21,7 +21,7 @@ nodeSelector:
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-events
-  tag: ff5dde8cd4f2
+  tag: b1882ad3dcd3
   pullPolicy: Always
 
 service:
