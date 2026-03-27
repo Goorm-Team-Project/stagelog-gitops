@@ -5,8 +5,8 @@ metadata:
   name: {{ include "backend.fullname" . }}
 spec:
   scaleTargetRef:
-    apiVersion: {{ .Values.hpa.apiVersion | default "apps/v1" }}
-    kind: {{ .Values.hpa.kind | default "Deployment" }}
+    apiVersion: {{ .Values.hpa.apiVersion | default "argoproj.io/v1alpha1" }}
+    kind: {{ .Values.hpa.kind | default "Rollout" }}
     name: {{ include "backend.fullname" . }}
   minReplicas: {{ .Values.hpa.minReplicas | default 2 }}
   maxReplicas: {{ .Values.hpa.maxReplicas | default 10 }}
