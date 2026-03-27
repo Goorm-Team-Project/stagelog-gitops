@@ -21,7 +21,7 @@ nodeSelector:
 
 image:
   repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-auth
-  tag: 964a1f7e8805
+  tag: e1bee5615c1e
   pullPolicy: Always
 
 service:
