@@ -14,6 +14,7 @@ hpa:
   kind: Deployment
   minReplicas: 1
   maxReplicas: 5
+  cpuUtilization: 70
 
 nodeSelector:
   karpenter.sh/capacity-type: spot
