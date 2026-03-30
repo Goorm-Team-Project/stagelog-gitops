@@ -1,0 +1,81 @@
+name: dev-notifications-consumer
+
+rollout:
+  enabled: false
+
+deployment:
+  enabled: true
+
+replicaCount: 1
+
+hpa:
+  enabled: false
+
+nodeSelector:
+  karpenter.sh/capacity-type: spot
+
+image:
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-notifications
+  tag: 31a5faf95624
+  pullPolicy: Always
+
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+secret:
+  enabled: false
+
+serviceAccount:
+  enabled: true
+  create: true
+  name: stagelog-notifications-consumer-sa
+  roleArn: arn:aws:iam::430118823715:role/stagelog-notifications-consumer-workload-role
+
+envFromSecret: dev-notifications-secret
+
+env:
+  - name: DJANGO_SETTINGS_MODULE
+    value: config.settings
+
+command:
+  - /bin/sh
+  - -c
+
+args:
+  - |
+    set -eu
+    while true; do
+      python manage.py consume_notification_queue \
+        --queue-url="${NOTIFICATION_SQS_QUEUE_URL}" \
+        --max-messages="${NOTIFICATION_CONSUMER_MAX_MESSAGES:-10}" \
+        --wait-time-seconds="${NOTIFICATION_CONSUMER_WAIT_TIME_SECONDS:-20}";
+      sleep 1;
+    done
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 400m
+    memory: 512Mi
+
+readinessProbe:
+  enabled: false
+  
+livenessProbe:
+  enabled: false
+  type: exec
+  exec:
+    command:
+      - sh
+      - -c
+      - "ps -ef | grep '[c]onsume_notification_queue'"
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+  

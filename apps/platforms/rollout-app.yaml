@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-rollouts
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"   
+
+spec:
+  project: dev-stagelog
+
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argo-rollouts
+    targetRevision: 2.35.0
+
+    helm:
+      parameters:
+        - name: installCRDs
+          value: "false"
+
+        - name: controller.resources.requests.cpu
+          value: "100m"
+        - name: controller.resources.requests.memory
+          value: "128Mi"
+
+        - name: controller.resources.limits.cpu
+          value: "500m"
+        - name: controller.resources.limits.memory
+          value: "512Mi"
+
+        - name: dashboard.enabled
+          value: "true"
+        - name: dashboard.resources.requests.cpu
+          value: "50m"
+        - name: dashboard.resources.requests.memory
+          value: "64Mi"
+        - name: dashboard.resources.limits.cpu
+          value: "100m"
+        - name: dashboard.resources.limits.memory
+          value: "128Mi"
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-rollouts
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

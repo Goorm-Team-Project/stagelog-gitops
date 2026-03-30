@@ -1,0 +1,72 @@
+name: dev-auth
+
+rollout:
+  enabled: true
+  activeService: auth-svc
+  previewService: auth-svc-preview
+
+deployment:
+  enabled: false
+
+replicaCount: 1
+
+hpa:
+  enabled: true
+  kind: Rollout
+  minReplicas: 1
+  maxReplicas: 5
+
+nodeSelector:
+  karpenter.sh/capacity-type: spot
+
+image:
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-auth
+  tag: e1bee5615c1e
+  pullPolicy: Always
+
+service:
+  enabled: true
+  name: auth-svc
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+
+secret:
+  enabled: false
+
+serviceAccount:
+  enabled: false
+
+envFromSecret: dev-auth-secret
+
+env:
+  - name: DJANGO_SETTINGS_MODULE
+    value: config.settings
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 400m
+    memory: 512Mi
+
+readinessProbe:
+  enabled: true
+  path: /
+  port: 8000
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+livenessProbe:
+  enabled: true
+  path: /
+  port: 8000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3

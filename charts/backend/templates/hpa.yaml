@@ -1,0 +1,20 @@
+{{- if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "backend.fullname" . }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ .Values.hpa.apiVersion | default "argoproj.io/v1alpha1" }}
+    kind: {{ .Values.hpa.kind | default "Rollout" }}
+    name: {{ include "backend.fullname" . }}
+  minReplicas: {{ .Values.hpa.minReplicas | default 2 }}
+  maxReplicas: {{ .Values.hpa.maxReplicas | default 10 }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.cpuUtilization | default 40 }}
+{{- end }}

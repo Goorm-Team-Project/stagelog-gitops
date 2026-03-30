@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubecost
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0" # prometheus(-1) 다음에 배포
+spec:
+  project: dev-stagelog
+  source:
+    repoURL: 'https://github.com/Goorm-Team-Project/stagelog-gitops.git'
+    targetRevision: develop
+    path: charts/kubecost
+    helm:
+      valueFiles:
+        - values/dev/kubecost.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kubecost
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

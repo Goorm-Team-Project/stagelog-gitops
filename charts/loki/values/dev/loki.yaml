@@ -1,0 +1,100 @@
+loki:
+  deploymentMode: SingleBinary
+
+  loki:
+    auth_enabled: false
+
+    commonConfig:
+      replication_factor: 1
+      path_prefix: /var/loki
+
+    storage:
+      type: filesystem
+
+    schemaConfig:
+      configs:
+        - from: "2024-01-01"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: index_
+            period: 24h
+
+    limits_config:
+      retention_period: 72h
+      max_query_series: 500
+      max_query_parallelism: 2
+
+  singleBinary:
+    replicas: 1
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            # 1. Fargate 제외 (기존 유지)
+            - key: eks.amazonaws.com/compute-type
+              operator: NotIn
+              values:
+              - fargate
+            # 2. Karpenter 노드풀 또는 기존 노드그룹 둘 중 하나만 있으면 OK
+            - key: karpenter.sh/nodepool
+              operator: Exists
+          - matchExpressions:
+            - key: eks.amazonaws.com/nodegroup
+              operator: Exists
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+    persistence:
+      enabled: false
+
+    extraVolumes:
+      - name: loki-data
+        emptyDir: {}
+
+    extraVolumeMounts:
+      - name: loki-data
+        mountPath: /var/loki
+
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+  backend:
+    replicas: 0
+
+  gateway:
+    enabled: false
+
+  lokiCanary:
+    enabled: false
+
+  chunksCache:
+    enabled: false
+  resultsCache:
+    enabled: false
+
+  monitoring:
+    selfMonitoring:
+      enabled: false
+      grafanaAgent:
+        installOperator: false
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: prometheus-stack
+
+  sidecar:
+    rules:
+      enabled: false
+
+  test:
+    enabled: false

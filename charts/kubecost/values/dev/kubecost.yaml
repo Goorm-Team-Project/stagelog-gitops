@@ -1,0 +1,50 @@
+cost-analyzer:
+  nodeSelector:
+    karpenter.sh/capacity-type: spot
+
+  persistentVolume:
+    enabled: false
+
+  kubecostModel:
+    persistence:
+      enabled: false
+
+  prometheus:
+    server:
+      nodeSelector:
+        karpenter.sh/capacity-type: on-demand
+      persistentVolume:
+        enabled: false
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "256Mi"
+        limits:
+          cpu: "500m"
+          memory: "512Mi"
+
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "800m"
+      memory: "1Gi"
+  
+  grafana:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "300m"
+        memory: "256Mi"
+
+  forecasting:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "200m"
+        memory: "256Mi"

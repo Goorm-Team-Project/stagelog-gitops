@@ -1,0 +1,66 @@
+rollout:
+  enabled: false
+
+name: dev-outboxworker
+
+deployment:
+  enabled: true
+
+replicaCount: 1
+
+hpa:
+  enabled: false
+
+nodeSelector:
+  karpenter.sh/capacity-type: spot
+
+image:
+  repository: 430118823715.dkr.ecr.ap-northeast-2.amazonaws.com/stagelog-outbox-worker
+  tag: 36bde8468b95
+  pullPolicy: Always
+
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+secret:
+  enabled: false
+
+serviceAccount:
+  enabled: true
+  create: true
+  name: stagelog-outbox-worker-sa
+  roleArn: arn:aws:iam::430118823715:role/stagelog-outbox-worker-workload-role
+
+envFromSecret: dev-outboxworker-secret
+
+env:
+  - name: DJANGO_SETTINGS_MODULE
+    value: config.settings
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+readinessProbe:
+  enabled: false
+  
+livenessProbe:
+  enabled: false
+  type: exec
+  exec:
+    command:
+      - sh
+      - -c
+      - "ps -ef | grep '[p]ublish_outbox'"
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+ 

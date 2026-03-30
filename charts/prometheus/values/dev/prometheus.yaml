@@ -1,0 +1,300 @@
+kube-prometheus-stack:
+  _onDemandNodeSelector: &onDemandNodeSelector
+    karpenter.sh/capacity-type: "on-demand"
+
+  crds:
+    enabled: true
+    upgradeJob:
+      enabled: true
+
+  # EKS : 워커에서 관측 가능한 컴포넌트는 스크랩,알림 활성화. etcd/스케줄러/컨트롤러 매니저는 AWS 관리라 비활성화
+  kubeApiServer:
+    enabled: true
+  kubeControllerManager:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubeEtcd:
+    enabled: false
+  kubeProxy:
+    enabled: true
+  coreDns:
+    enabled: true
+
+  # 클러스터에 없는 컴포넌트(etcd 등)에 대한 기본 알림은 끄고 오탐을 줄임
+  defaultRules:
+    rules:
+      etcd: false
+      kubeControllerManager: false
+      kubeSchedulerAlerting: false
+      kubeSchedulerRecording: false
+
+  grafana:
+    nodeSelector:
+      karpenter.sh/capacity-type: "spot"
+    adminPassword: "admin"
+    dashboards:
+      default:
+        node-exporter:
+          gnetId: 1860
+          revision: 31
+          datasource: "Prometheus"
+        k8s-compute-resources:
+          gnetId: 315
+          revision: 3
+          datasource: "Prometheus"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+    persistence:
+      enabled: false
+    # Loki
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki.monitoring.svc.cluster.local:3100
+        isDefault: false
+        jsonData:
+          maxLines: 1000
+
+  prometheus:
+    prometheusSpec:
+      nodeSelector: *onDemandNodeSelector
+      scrapeInterval: "30s"
+      scrapeTimeout: "10s"
+      retention: "15d"
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector:
+        matchLabels:
+          release: "prometheus-stack" 
+
+  alertmanager:
+    enabled: true
+    config: {}
+    alertmanagerSpec:
+      nodeSelector: *onDemandNodeSelector
+      useExistingSecret: true
+      # ESO로 생성한 Secret(키: alertmanager.yaml)을 Alertmanager에 주입
+      configSecret: alertmanager-discord-config
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 128Mi
+
+  prometheusOperator:
+    enabled: true
+    admissionWebhooks:
+      enabled: true
+      patch:
+        enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+
+  prometheus-node-exporter:
+    prometheus:
+      monitor:
+        enabled: true
+    resources:
+      requests:
+        cpu: 10m     
+        memory: 32Mi  
+      limits:
+        cpu: 100m     
+        memory: 128Mi
+
+  kube-state-metrics:
+    nodeSelector: *onDemandNodeSelector
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 150m
+        memory: 256Mi
+
+# ExternalSecret
+discordWebhookExternalSecret:
+  enabled: true
+  name: prometheus-discord-webhook
+  namespace: monitoring
+  secretStoreRef:
+    name: aws-parameterstore
+    kind: ClusterSecretStore
+  refreshInterval: 1h
+  target:
+    name: prometheus-discord-webhook
+    creationPolicy: Owner
+  data:
+    - secretKey: webhook-url
+      remoteRef:
+        key: /stagelog/monitoring/discord-webhook-url
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
+
+# Alertmanager 구성 전체를 SSM에서 받아 Alertmanager에 주입
+alertmanagerConfigExternalSecret:
+  enabled: true
+  name: alertmanager-discord-config
+  namespace: monitoring
+  secretStoreRef:
+    name: aws-parameterstore
+    kind: ClusterSecretStore
+  refreshInterval: 1h
+  target:
+    name: alertmanager-discord-config
+    creationPolicy: Owner
+  data:
+    - secretKey: alertmanager.yaml
+      remoteRef:
+        key: /stagelog/monitoring/alertmanager-discord-config
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
+
+# PrometheusRule
+customPrometheusRule:
+  enabled: true
+  name: custom-alerts
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+  groups:
+    - name: custom.rules
+      rules:
+        - alert: ResourceBurnerCpuHigh
+          expr: rate(container_cpu_usage_seconds_total{namespace="monitoring",pod="resource-burner",container="stress"}[1m]) > 0.08
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "resource-burner CPU near limit"
+            description: "resource-burner CPU usage is near 100m limit"
+        - alert: ResourceBurnerMemoryHigh
+          expr: container_memory_working_set_bytes{namespace="monitoring",pod="resource-burner",container="stress"} > 45 * 1024 * 1024
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "resource-burner memory high"
+            description: "resource-burner memory working set > 45Mi"
+
+    # (kube-prometheus-stack의 기본 알림인 TargetDown 과 유사하나 잡 단위로 바로 식별 가능)
+    - name: platform.monitoring
+      rules:
+        - alert: KubeStateMetricsTargetDown
+          expr: up{job="kube-state-metrics"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "kube-state-metrics 메트릭 수집 중단"
+            description: "클러스터 상태 메트릭이 끊겼습니다. Pod, ServiceMonitor, 네트워크를 확인하세요."
+
+    - name: dev.backend
+      rules:
+        - alert: DevBackendContainerOOMKilled
+          expr: |
+            sum by (namespace, pod, container) (
+              kube_pod_container_status_last_terminated_reason{
+                namespace="dev-backend",
+                job="kube-state-metrics",
+                reason="OOMKilled"
+              }
+            ) > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "dev-backend 컨테이너 OOM 종료"
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) — 메모리 limit/request,워크로드 프로파일을 확인하세요."
+
+        - alert: DevBackendContainerImagePullBackOff
+          expr: |
+            kube_pod_container_status_waiting_reason{
+              namespace="dev-backend",
+              job="kube-state-metrics",
+              reason=~"ImagePullBackOff|ErrImagePull|ErrImageNeverPull"
+            } > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "dev-backend 이미지 풀 실패"
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) — 레지스트리 권한, 이미지 태그, imagePullSecrets를 확인하세요."
+
+        - alert: DevBackendContainerConfigError
+          expr: |
+            kube_pod_container_status_waiting_reason{
+              namespace="dev-backend",
+              job="kube-state-metrics",
+              reason=~"CreateContainerConfigError|CreateContainerError"
+            } > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "dev-backend 컨테이너 생성 설정 오류"
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} — Secret/ConfigMap/환경변수 마운트를 확인하세요."
+
+        - alert: DevBackendHighContainerRestartRate
+          expr: |
+            sum by (namespace, pod, container) (
+              rate(kube_pod_container_status_restarts_total{namespace="dev-backend", job="kube-state-metrics"}[15m])
+            ) > 0.02
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "dev-backend 컨테이너 재시작률 높음"
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) — CrashLoop 전 단계의 불안정일 수 있습니다. 로그, 프로브, 의존성을 확인하세요."
+
+    # EKS 보조 알림 (차트 기본 규칙과 중복 최소화)
+    - name: eks.essentials
+      rules:
+        - alert: EKSCoreDNSReplicasMismatch
+          expr: |
+            kube_deployment_spec_replicas{namespace="kube-system", job="kube-state-metrics", deployment="coredns"}
+              != kube_deployment_status_replicas_available{namespace="kube-system", job="kube-state-metrics", deployment="coredns"}
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CoreDNS 가용 레플리카가 spec과 불일치"
+            description: "kube-system/coredns 스케줄, 노드, 리소스를 확인하세요. DNS 장애는 전체 워크로드에 영향을 줍니다."
+
+        - alert: EKSVPCCNIDaemonSetNotReady
+          expr: |
+            kube_daemonset_status_desired_number_scheduled{namespace="kube-system", job="kube-state-metrics", daemonset="aws-node"}
+              > kube_daemonset_status_number_ready{namespace="kube-system", job="kube-state-metrics", daemonset="aws-node"}
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "aws-node DaemonSet 준비 수 불일치"
+            description: "VPC CNI(aws-node)가 모든 노드에서 준비되지 않았습니다. ENI, 파드 IP, 네트워크 플러그인 로그를 확인하세요."
+
+        - alert: EKSMetricsServerUnavailable
+          expr: |
+            kube_deployment_spec_replicas{namespace="kube-system", job="kube-state-metrics", deployment="metrics-server"}
+              != kube_deployment_status_replicas_available{namespace="kube-system", job="kube-state-metrics", deployment="metrics-server"}
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "metrics-server 가용 레플리카 불일치"
+            description: "HPA, kubectl top 등에 영향이 있을 수 있습니다. EKS 애드온 또는 배포 상태를 확인하세요."

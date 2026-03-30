@@ -1,0 +1,3 @@
+clusterName: "stagelog-eks"
+
+nodeRole: "stagelog-karpenter-node-role"
