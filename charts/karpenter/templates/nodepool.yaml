@@ -31,5 +31,5 @@ spec:
     consolidateAfter: 5m # 노드가 과소 활용된 지 1분 뒤에 통합 시도
 
   limits:
-    cpu: "20" 
-    memory: "40Gi"
+    cpu: "50" 
+    memory: "100Gi"
